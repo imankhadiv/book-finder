@@ -74,7 +74,7 @@ class ApiUtil {
         }
     }
 
-    public static ArrayList<Book> getBooksFromJson(String json) {
+     static ArrayList<Book> getBooksFromJson(String json) {
         ArrayList<Book> books = new ArrayList<>();
 
         final String ID = "id";
@@ -103,7 +103,7 @@ class ApiUtil {
                         volumeInfoJson.getString(TITLE),
                         (volumeInfoJson.isNull(SUBTITLE) ? "" : volumeInfoJson.getString(SUBTITLE)),
                         authors,
-                        volumeInfoJson.getString(PUBLISHER),
+                        volumeInfoJson.isNull(PUBLISHER) ? "" : volumeInfoJson.getString(PUBLISHER),
                         volumeInfoJson.getString(PUBLISHED_DATE)
                 );
                 books.add(book);

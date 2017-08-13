@@ -3,6 +3,8 @@ package elrast.com.book;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 
 public class BookListActivity extends AppCompatActivity {
     private ProgressBar progressBar;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +24,12 @@ public class BookListActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_book_list);
 
+
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+
+        LinearLayoutManager bookManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(bookManager);
 
 
         try {
@@ -54,26 +62,20 @@ public class BookListActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            TextView textView = (TextView) findViewById(R.id.tvResponse);
             TextView errorTextView = (TextView) findViewById(R.id.error_text_view);
             if (result == null) {
-                textView.setVisibility(View.INVISIBLE);
+                recyclerView.setVisibility(View.INVISIBLE);
                 errorTextView.setVisibility(View.VISIBLE);
             } else {
-                textView.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.VISIBLE);
                 errorTextView.setVisibility(View.INVISIBLE);
             }
             progressBar.setVisibility(View.INVISIBLE);
 
             ArrayList<Book> books = ApiUtil.getBooksFromJson(result);
-            String resultString = "";
-            for (Book book : books) {
 
-                resultString = resultString + book.title + "\n" + book.publishedDate + "\n\n";
-            }
-
-
-            textView.setText(resultString);
+            BookAdapter bookAdapter = new BookAdapter(books);
+            recyclerView.setAdapter(bookAdapter);
         }
 
         @Override

@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Book</string>
     <string name="error_loading_data">Error loading data from google books API</string>
+    <string name="image_is_not_available">image is not available</string>
+    <string name="title">title</string>
+    <string name="author">Author</string>
 </resources>

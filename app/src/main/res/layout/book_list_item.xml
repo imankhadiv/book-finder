@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+
+    android:weightSum="100">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="15"
+        android:contentDescription="@string/image_is_not_available"
+        android:padding="15dp"
+        android:src="@drawable/book_open" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="85"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/title" />
+
+        <TextView
+            android:id="@+id/authorr_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/author"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/author" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="100">
+
+            <TextView
+                android:id="@+id/publisher_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_weight="75" />
+
+            <TextView
+                android:id="@+id/publish_date_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="25"
+                android:paddingEnd="@dimen/published_date_padding"
+                android:paddingRight="@dimen/published_date_padding" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
