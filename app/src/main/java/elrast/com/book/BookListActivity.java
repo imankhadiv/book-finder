@@ -2,10 +2,15 @@ package elrast.com.book;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuItemImpl;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -15,6 +20,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class BookListActivity extends AppCompatActivity {
+    public static final String TAG = BookListActivity.class.getSimpleName();
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
 
@@ -43,7 +49,37 @@ public class BookListActivity extends AppCompatActivity {
         }
     }
 
-    public class BookQueryTask extends AsyncTask<URL, Void, String> {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.book_list_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                try {
+                    URL url = ApiUtil.buildURL(query);
+                    new BookQueryTask().execute(url);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e(TAG, e.toString());
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        return true;
+
+    }
+
+    private class BookQueryTask extends AsyncTask<URL, Void, String> {
 
         @Override
         protected String doInBackground(URL... params) {
@@ -84,4 +120,5 @@ public class BookListActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
         }
     }
+
 }
