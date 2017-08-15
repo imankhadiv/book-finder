@@ -85,6 +85,8 @@ class ApiUtil {
         final String ITEMS = "items";
         final String VOLUME_INFO = "volumeInfo";
         final String DESCRIPTION = "description";
+        final String THUMBNAIL = "thumbnail";
+        final String IMAGE_LINKS = "imageLinks";
 
         try {
             JSONObject jsonObject = new JSONObject(json);
@@ -94,6 +96,8 @@ class ApiUtil {
                 JSONObject bookJson = arrayBooks.getJSONObject(i);
                 JSONObject volumeInfoJson = bookJson.getJSONObject(VOLUME_INFO);
                 int autherNum = volumeInfoJson.getJSONArray(AUTHORS).length();
+
+                JSONObject imageLinksObject = volumeInfoJson.getJSONObject(IMAGE_LINKS);
                 String[] authors = new String[autherNum];
                 for (int j = 0; j < autherNum; j++) {
                     authors[j] = volumeInfoJson.getJSONArray(AUTHORS).get(j).toString();
@@ -105,14 +109,13 @@ class ApiUtil {
                         authors,
                         volumeInfoJson.isNull(PUBLISHER) ? "" : volumeInfoJson.getString(PUBLISHER),
                         volumeInfoJson.getString(PUBLISHED_DATE),
-                        volumeInfoJson.getString(DESCRIPTION)
+                        volumeInfoJson.getString(DESCRIPTION),
+                        imageLinksObject.getString(THUMBNAIL)
 
                 );
                 books.add(book);
 
             }
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

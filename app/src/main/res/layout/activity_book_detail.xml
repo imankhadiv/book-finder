@@ -16,7 +16,7 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:context="elrast.com.book.BookDetail">
 
             <TextView
@@ -57,7 +57,7 @@
                 android:contentDescription="@string/empty_image"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/subtitleTextView"
-                app:srcCompat="@drawable/book_open" />
+                android:imageUrl="@{Book.thumbnail}"/>
 
             <TextView
                 android:id="@+id/autherTextView"
