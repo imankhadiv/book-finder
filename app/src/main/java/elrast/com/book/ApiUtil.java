@@ -13,7 +13,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -74,7 +73,7 @@ class ApiUtil {
         }
     }
 
-     static ArrayList<Book> getBooksFromJson(String json) {
+    static ArrayList<Book> getBooksFromJson(String json) {
         ArrayList<Book> books = new ArrayList<>();
 
         final String ID = "id";
@@ -85,6 +84,7 @@ class ApiUtil {
         final String PUBLISHED_DATE = "publishedDate";
         final String ITEMS = "items";
         final String VOLUME_INFO = "volumeInfo";
+        final String DESCRIPTION = "description";
 
         try {
             JSONObject jsonObject = new JSONObject(json);
@@ -104,7 +104,9 @@ class ApiUtil {
                         (volumeInfoJson.isNull(SUBTITLE) ? "" : volumeInfoJson.getString(SUBTITLE)),
                         authors,
                         volumeInfoJson.isNull(PUBLISHER) ? "" : volumeInfoJson.getString(PUBLISHER),
-                        volumeInfoJson.getString(PUBLISHED_DATE)
+                        volumeInfoJson.getString(PUBLISHED_DATE),
+                        volumeInfoJson.getString(DESCRIPTION)
+
                 );
                 books.add(book);
 
