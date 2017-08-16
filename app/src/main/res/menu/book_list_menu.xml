@@ -7,4 +7,9 @@
         android:title="@string/search"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always|collapseActionView" />
+
+    <item
+        android:id="@+id/advanced_search"
+        android:title="@string/advanced_search"
+        app:showAsAction="never"/>
 </menu>
