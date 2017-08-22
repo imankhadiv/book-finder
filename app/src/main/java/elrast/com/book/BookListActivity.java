@@ -127,13 +127,14 @@ public class BookListActivity extends AppCompatActivity {
             } else {
                 recyclerView.setVisibility(View.VISIBLE);
                 errorTextView.setVisibility(View.INVISIBLE);
+                ArrayList<Book> books = ApiUtil.getBooksFromJson(result);
+
+                BookAdapter bookAdapter = new BookAdapter(books);
+                recyclerView.setAdapter(bookAdapter);
             }
             progressBar.setVisibility(View.INVISIBLE);
 
-            ArrayList<Book> books = ApiUtil.getBooksFromJson(result);
 
-            BookAdapter bookAdapter = new BookAdapter(books);
-            recyclerView.setAdapter(bookAdapter);
         }
 
         @Override
