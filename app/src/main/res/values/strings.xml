@@ -12,4 +12,5 @@
     <string name="hint_author">Insert Author(s)</string>
     <string name="hint_isbn"></string>
     <string name="advanced_search">Advanced Search</string>
+    <string name="no_search_data">Please enter valid search terms</string>
 </resources>

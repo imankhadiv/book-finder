@@ -15,9 +15,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- * Created by iman on 8/1/17.
- */
 
 class ApiUtil {
 
@@ -25,6 +22,10 @@ class ApiUtil {
     private static final String QUERY_PARAMETER_KEY = "q";
     private static final String API_KEY = "AIzaSyDfuwVR9j-WCrate9rcNEDBfeEoJnemvl8";
     private static final String KEY = "key";
+    private static final String PUBLISHER = "inpublisher:";
+    private static final String AUTHOR = "inauthor:";
+    private static final String TITLE = "intitle:";
+    private static final String ISBN = "inisbn:";
 
 
     private ApiUtil() {
@@ -47,6 +48,29 @@ class ApiUtil {
             e.printStackTrace();
         }
         return url;
+    }
+
+    static URL buildURL(String title, String author, String publisher, String isbn) {
+
+        URL url = null;
+        StringBuilder sb = new StringBuilder();
+        if (!title.isEmpty()) sb.append(TITLE).append(title).append("+");
+        if (!author.isEmpty()) sb.append(AUTHOR).append(author).append("+");
+        if (!publisher.isEmpty()) sb.append(PUBLISHER).append(publisher).append("+");
+        if (!isbn.isEmpty()) sb.append(ISBN).append(isbn).append("+");
+        sb.setLength(sb.length() - 1);
+        String query = sb.toString();
+        Uri uri = Uri.parse(BASE_API_URL).buildUpon()
+                .appendQueryParameter(QUERY_PARAMETER_KEY, query)
+                 //.appendQueryParameter(KEY, API_KEY)
+                .build();
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return url;
+
     }
 
     static String getJson(URL url) throws IOException {
@@ -90,16 +114,24 @@ class ApiUtil {
 
         try {
             JSONObject jsonObject = new JSONObject(json);
-            JSONArray arrayBooks = jsonObject.getJSONArray(ITEMS);
+//            JSONArray arrayBooks = jsonObject.getJSONArray(ITEMS);
+            JSONArray arrayBooks = jsonObject.isNull(ITEMS) ? new JSONArray() : jsonObject.getJSONArray(ITEMS);
             int numberOfBooks = arrayBooks.length();
             for (int i = 0; i < numberOfBooks; i++) {
                 JSONObject bookJson = arrayBooks.getJSONObject(i);
                 JSONObject volumeInfoJson = bookJson.getJSONObject(VOLUME_INFO);
-                int autherNum = volumeInfoJson.getJSONArray(AUTHORS).length();
-
-                JSONObject imageLinksObject = volumeInfoJson.getJSONObject(IMAGE_LINKS);
-                String[] authors = new String[autherNum];
-                for (int j = 0; j < autherNum; j++) {
+                int authorNum = 0;
+                try {
+                    authorNum = volumeInfoJson.getJSONArray(AUTHORS).length();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                JSONObject imageLinksObject = null;
+                if (volumeInfoJson.has(IMAGE_LINKS)) {
+                    imageLinksObject = volumeInfoJson.getJSONObject(IMAGE_LINKS);
+                }
+                String[] authors = new String[authorNum];
+                for (int j = 0; j < authorNum; j++) {
                     authors[j] = volumeInfoJson.getJSONArray(AUTHORS).get(j).toString();
                 }
 
@@ -108,9 +140,9 @@ class ApiUtil {
                         (volumeInfoJson.isNull(SUBTITLE) ? "" : volumeInfoJson.getString(SUBTITLE)),
                         authors,
                         volumeInfoJson.isNull(PUBLISHER) ? "" : volumeInfoJson.getString(PUBLISHER),
-                        volumeInfoJson.getString(PUBLISHED_DATE),
-                        volumeInfoJson.getString(DESCRIPTION),
-                        imageLinksObject.getString(THUMBNAIL)
+                        volumeInfoJson.isNull(PUBLISHED_DATE) ? "" : volumeInfoJson.getString(PUBLISHED_DATE),
+                        volumeInfoJson.isNull(DESCRIPTION) ? "" : volumeInfoJson.getString(DESCRIPTION),
+                        (imageLinksObject == null) ? "" : imageLinksObject.getString(THUMBNAIL)
 
                 );
                 books.add(book);

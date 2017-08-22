@@ -8,9 +8,8 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-/**
- * Created by iman on 8/8/17.
- */
+import static elrast.com.book.R.drawable.book_open;
+
 
 public class Book implements Parcelable {
 
@@ -77,9 +76,14 @@ public class Book implements Parcelable {
     @BindingAdapter({"android:imageUrl"})
     public static void loadImage(ImageView imageView, String imageUrl) {
 
-        Picasso.with(imageView.getContext())
-                .load(imageUrl)
-                .placeholder(R.drawable.book_open)
-                .into(imageView);
+        if (!imageUrl.isEmpty()) {
+            Picasso.with(imageView.getContext())
+                    .load(imageUrl)
+                    .placeholder(book_open)
+                    .into(imageView);
+        } else {
+            imageView.setBackgroundResource(book_open);
+        }
+
     }
 }

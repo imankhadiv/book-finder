@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.MenuItemImpl;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -38,10 +37,19 @@ public class BookListActivity extends AppCompatActivity {
         LinearLayoutManager bookManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(bookManager);
 
+        Intent intent = getIntent();
+        String query = intent.getStringExtra("Query");
+        URL bookUrl;
+
 
         try {
-            URL url = ApiUtil.buildURL("cooking");
-            new BookQueryTask().execute(url);
+            if (query == null || query.isEmpty()) {
+                bookUrl = ApiUtil.buildURL("cooking");
+            } else {
+                bookUrl = new URL(query);
+            }
+
+            new BookQueryTask().execute(bookUrl);
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -53,7 +61,7 @@ public class BookListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.advanced_search:
                 Intent intent = new Intent(this, SearchActivity.class);
                 startActivity(intent);
